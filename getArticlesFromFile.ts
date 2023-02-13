@@ -1,22 +1,21 @@
-import { readFileSync } from "fs";
+// import { readFileSync } from "fs";
 
-type Article = {
-  id: string;
-  title: string;
-  description: string;
-};
+// type Article = {
+//   id: string;
+//   title: string;
+//   description: string;
+// };
 
-type Articles = {
-  articles: Article[];
-};
+// type Articles = {
+//   articles: Article[];
+// };
 
-const getArticlesFromFile = (): Articles => {
-  const file = readFileSync("./src/db/db.json", "utf-8");
+// const getArticlesFromFile = (): Articles => {
+//   const file = readFileSync("./src/db/db.json", "utf-8");
 
-  const parseFileTextToJson = JSON.parse(file);
+//   const parseFileTextToJson = JSON.parse(file);
 
-  return parseFileTextToJson;
-};
+//   return parseFileTextToJson;
+// };
 
-
-export default getArticlesFromFile
+// export default getArticlesFromFile
