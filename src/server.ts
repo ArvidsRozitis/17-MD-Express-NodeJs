@@ -61,25 +61,69 @@ app.delete("/posts/:id", (req: Request, res: Response) => {
         .send({ error: "An error occurred while deleting the post." });
       return;
     }
+
     res.send({ message: "Post deleted successfully." });
   });
 });
 
-// app.put("/posts/:id", (req: Request, res: Response) => {
-//   const postId = req.params.id;
-//   const { title, content } = req.body;
-//   pool.query(
-//     `UPDATE posts SET title = ?, content = ? WHERE id = ?`,
-//     [title, content, postId],
-//     (error, results) => {
-//       if (error) {
-//         res.status(500).send({ error: "An error occurred while updating the post." });
-//         return;
-//       }
-//       res.send({ message: "Post updated successfully." });
-//     }
-//   );
-// });
+//get comments for post
+app.get("/posts/comments/:id", (req: Request, res: Response) => {
+  const postId = req.params.id;
+  pool.query(
+    `SELECT * FROM postComments WHERE postID = ?`,
+    [postId],
+    (error, results) => {
+      if (error) throw error;
+      res.send(results);
+    }
+  );
+});
+
+//add single comment
+app.post("/posts/comments", (req: Request, res: Response) => {
+  const { author, postId, commentText } = req.body;
+  pool.query(
+    `INSERT INTO postComments (author, commentText, postId) VALUES (?, ?, ?)`,
+    [author, commentText, postId],
+    (error, results) => {
+      if (error) {
+        res.send({ error: "An error occurred while adding the comment." });
+        return;
+      }
+      res.send(results);
+    }
+  );
+});
+
+//delete selected comment
+app.delete("/posts/comments/:id", (req: Request, res: Response) => {
+  const commentId = req.params.id;
+  pool.query(`DELETE FROM postComments WHERE id = ?`, [commentId], (error) => {
+    if (error) {
+      res
+        .status(500)
+        .send({ error: "An error occurred while deleting the comment." });
+      return;
+    }
+    res.send({ message: "Comment deleted successfully." });
+  });
+});
+
+app.put("/posts/comments/:id", (req: Request, res: Response) => {
+  const commentId = req.params.id;
+  const { author, commentText } = req.body;
+  pool.query(
+    `UPDATE postComments SET author = ?, commentText = ? WHERE id = ?`,
+    [author, commentText, commentId],
+    (error) => {
+      if (error) {
+        res.send({ error: "An error occurred while updating the comment." });
+        return;
+      }
+      res.send({ message: "Comment updated successfully." });
+    }
+  );
+});
 
 app.listen(3004, () => {
   console.log("Application started on port 3004!");
