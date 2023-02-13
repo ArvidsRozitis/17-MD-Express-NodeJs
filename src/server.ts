@@ -3,6 +3,7 @@ import mysql from "mysql2";
 import { Request, Response } from "express";
 import bodyparser from "body-parser";
 import cors from "cors";
+import multer from "multer";
 
 const app = express();
 
